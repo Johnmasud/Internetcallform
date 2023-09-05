@@ -564,7 +564,9 @@ public partial class CFPictureByQuestionList : System.Web.UI.Page
        // }
         Photo_CF_Access = Request.Form["Photo_CF_Access"];
         BusRule_CommentBoxFlag = dt2.Rows[0]["BusRule_CommentBox"].ToString();
+       // Response.Write("Lang_id=" + Lang_id + "<BR>");
 
+        //Response.End();
        // Response.Write("Job_Visit_Date=" + Job_Visit_Date + "<BR>");
         //Execute the photo check by question procedure
         //*******************q_no,q_text,Response_Val,Ans_Text,q_order_no,Prod_upc,Prod_desc
@@ -580,15 +582,41 @@ public partial class CFPictureByQuestionList : System.Web.UI.Page
         GV_q_no = "";
         Prod_no = "";
         D_prod_no = "1";
+       //  Response.Write("Job_No=" + Job_No + "<BR>");
+        // Response.Write("Wave_No=" + Wave_No + "<BR>");
+        // Response.Write("Task_No=" + Task_No + "<BR>");
+        // Response.Write("Chain_No=" + Chain_No + "<BR>");
+        // Response.Write("Store_No=" + Store_No + "<BR>");
+        // Response.Write("Str_Merch_no=" + Str_Merch_no + "<BR>");
+       // Response.Write("dt.Tables.Count=" + dt.Tables.Count + "<BR>");
+       // Response.Write("Job_Visit_Date=" + Job_Visit_Date + "<BR>");
+       // Response.Write("Str_Sv_Panel_id=" + Str_Sv_Panel_id + "<BR>"); 
+        //Response.End();
+
         if (dt.Tables.Count > 0)
         {
-            
+            //Lang_id = 2;
 
             RecordCount = dt.Tables[0].Rows.Count;
             //Response.Write("RecordCount2=" + RecordCount2);
             if (RecordCount > 0)
             {
                 PhotoQGrid.DataSource = dt;
+
+                //add Min. Photo Required
+                if ((Lang_id == 1) || (Lang_id == 13))
+                {
+
+                    BoundField test = new BoundField();
+                    test.DataField = "Min_Photo_Req";
+                    test.HeaderText = "New Header";
+                    // test.ItemStyle = "Center";
+                    PhotoQGrid.Columns.Add(test);
+                    // PhotoQGrid.Columns.RemoveAt(6);
+                    // this will add a column at the end after the photo button
+                    PhotoQGrid.Columns.Insert(4, PhotoQGrid.Columns[5]);
+                }
+
 
                 PhotoQGrid.DataBind();
 
@@ -608,6 +636,22 @@ public partial class CFPictureByQuestionList : System.Web.UI.Page
                 row.Cells[2].Text = vPrompts[6];
                 row.Cells[3].Text = vPrompts[7];
 
+                if ((Lang_id == 1) || (Lang_id == 13))
+                {
+                    //add Minimum Photo Requirement only for USA
+                    row.Cells[4].Text = vPrompts[14]; //Min. Photo Required
+                    //row.Cells[4].Text = vPrompts[14]; //Min. Photo Required
+                    // PhotoQGrid.HeaderRow.Cells[4].Visible = false;
+                    PhotoQGrid.HeaderRow.Cells[6].Visible = false;
+
+                }
+                else
+                {
+                    //PhotoQGrid.HeaderRow.Cells[4].Visible = false;
+                    //PhotoQGrid.HeaderRow.Cells[6].Visible = false;
+                }
+                
+
                 Display_Q_Confirmation_No.Text = Photo_q_Confirmation_No;
                 
 
@@ -616,9 +660,17 @@ public partial class CFPictureByQuestionList : System.Web.UI.Page
                     PhotoQGrid.HeaderRow.Cells[0].Visible = false;
                     i = 0;
                     q = 0;
+                    
                     foreach (GridViewRow gvr in PhotoQGrid.Rows)
                     {
                        // Response.Write("i=" + i);
+                        if ((Lang_id == 1) || (Lang_id == 13))
+                        {
+                            gvr.Cells[6].Visible = false;
+                            gvr.Cells[4].Attributes.CssStyle["text-align"] = "center";
+                        }
+                        
+
                         strQ_text = gvr.Cells[1].Text;
                        // Response.Write("strQ_text=" + strQ_text + "<BR>");
                         GV_q_no = strQ_text.Substring(0, 3);
@@ -629,15 +681,15 @@ public partial class CFPictureByQuestionList : System.Web.UI.Page
                         {
                             //Response.Write("test");
                             PhotoQGrid.Rows[i].Cells[1].Text = "";
-                            PhotoQGrid.Rows[i].Cells[4].Text = "";
+                           // PhotoQGrid.Rows[i].Cells[4].Text = "";
                             q = i - 1;
                             PhotoQGrid.Rows[q].Cells[1].Style.Add("border-bottom-width", "1px");
                             PhotoQGrid.Rows[q].Cells[1].Style.Add("border-bottom-color", "white");
                             PhotoQGrid.Rows[q].Cells[1].Style.Add("border-bottom-style", "solid");
 
-                            PhotoQGrid.Rows[q].Cells[4].Style.Add("border-bottom-width", "1px");
-                            PhotoQGrid.Rows[q].Cells[4].Style.Add("border-bottom-color", "white");
-                            PhotoQGrid.Rows[q].Cells[4].Style.Add("border-bottom-style", "solid");
+                            //PhotoQGrid.Rows[q].Cells[4].Style.Add("border-bottom-width", "1px");
+                            //PhotoQGrid.Rows[q].Cells[4].Style.Add("border-bottom-color", "white");
+                            //PhotoQGrid.Rows[q].Cells[4].Style.Add("border-bottom-style", "solid");
 
                         }
                         // PhotoQGrid.Rows[1].Cells[2].Visible = false;
@@ -655,16 +707,27 @@ public partial class CFPictureByQuestionList : System.Web.UI.Page
                     Display_Q_Confirmation_Msg.Text = "" + vPrompts[9] + "";
                     i = 0;
                     q = 0;
+                   
                     foreach (GridViewRow gvr in PhotoQGrid.Rows)
                     {
                         //Response.Write("i=" + i);
+                        if ((Lang_id == 1) || (Lang_id == 13))
+                        {
+
+                            gvr.Cells[6].Visible = false;
+                            gvr.Cells[4].Attributes.CssStyle["text-align"] = "center";
+                        }
+
                         strQ_text = gvr.Cells[1].Text;
-                        //Response.Write("strQ_text=" + strQ_text + "<BR>");
+                        // Response.Write("strQ_text=" + strQ_text + "<BR>");
+                        
                         GV_q_no = strQ_text.Substring(0, 3);
                        // Response.Write("GV_q_no=" + GV_q_no + "<BR>");
-
+                        
                         StrProd_text = gvr.Cells[0].Text;
-                       // Response.Write("StrProd_text=" + StrProd_text + "<BR>");
+
+                      // Response.Write("StrProd_text=" + StrProd_text + "<BR>");
+                       // Response.End();
                         //Prod_no = StrProd_text.Substring(0, 1);
                        // Response.Write("Prod_no=" + Prod_no + "<BR>");
                         Prod_no_len = StrProd_text.IndexOf("-");
@@ -680,7 +743,7 @@ public partial class CFPictureByQuestionList : System.Web.UI.Page
                             {
                                 PhotoQGrid.Rows[i].Cells[0].Text = "";
                                 PhotoQGrid.Rows[i].Cells[1].Text = "";
-                                PhotoQGrid.Rows[i].Cells[4].Text = "";
+                                //PhotoQGrid.Rows[i].Cells[4].Text = "";
                                 q = i - 1;
                                 PhotoQGrid.Rows[q].Cells[0].Style.Add("border-bottom-width", "1px");
                                 PhotoQGrid.Rows[q].Cells[0].Style.Add("border-bottom-color", "white");
@@ -690,9 +753,9 @@ public partial class CFPictureByQuestionList : System.Web.UI.Page
                                 PhotoQGrid.Rows[q].Cells[1].Style.Add("border-bottom-color", "white");
                                 PhotoQGrid.Rows[q].Cells[1].Style.Add("border-bottom-style", "solid");
 
-                                PhotoQGrid.Rows[q].Cells[4].Style.Add("border-bottom-width", "1px");
-                                PhotoQGrid.Rows[q].Cells[4].Style.Add("border-bottom-color", "white");
-                                PhotoQGrid.Rows[q].Cells[4].Style.Add("border-bottom-style", "solid");
+                               // PhotoQGrid.Rows[q].Cells[4].Style.Add("border-bottom-width", "1px");
+                               // PhotoQGrid.Rows[q].Cells[4].Style.Add("border-bottom-color", "white");
+                               // PhotoQGrid.Rows[q].Cells[4].Style.Add("border-bottom-style", "solid");
                             }
 
                         }
@@ -774,7 +837,7 @@ public partial class CFPictureByQuestionList : System.Web.UI.Page
     #region SystemPromptandRule
     private void GetPromptTranslation()
     {
-        vPrompts = new string[14];
+        vPrompts = new string[15];
         vPrompts[0] = "Please enter a valid visit date";
         vPrompts[1] = "The Visit date entered is invalid for this Job,Wave and Task.";
         vPrompts[2] = "The Visit date greater than Today`s date";
@@ -789,6 +852,7 @@ public partial class CFPictureByQuestionList : System.Web.UI.Page
         vPrompts[11] = "Click Cancel to continue with photo upload.";
         vPrompts[12] = "Click OK to navigate away from this screen.";
         vPrompts[13] = "All required photos are now submitted. Click one of the buttons below to proceed.";
+        vPrompts[14] = "Min. Photo Required";
  
 
         ptAppTranslation.DoArrayPromptTranslation(vPrompts);
